@@ -44,14 +44,14 @@ class PrincipalRequest extends FormRequest
             'pago.tthpgpcent' => 'required', 
             'pago.tthpgpcnta' => 'required', 
             'pago.tthpgpfpag' => 'required', 
-            'bonos' => 'present|array|size:1'
+            'bonos' => 'required|array|min:1'
         ];
     }
 
     public function messages()
     {
         return [
-            'bonos.size' => 'Debe Registrar al menos un Bono'
+            'bonos.min' => 'Debe Registrar al menos un Bono'
         ];
     }
 

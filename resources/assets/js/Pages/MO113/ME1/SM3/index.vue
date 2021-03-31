@@ -11,12 +11,25 @@
                 </template>
             </TthpgpForm>
 
-            <div id="element0" name="Default options">
-    <div class="content">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-    </div>
-  </div>
             <zingchart :data="chartData"></zingchart>
+            <table class="table table-dark" id="sample">
+                <thead>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First</th>
+                    <th scope="col">Last</th>
+                    <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                <!-- <tbody>
+                    <tr v-for="user in usuarios" :key="user.gbagecage">
+                        <td>{{ user.gbagecage }}</td>
+                        <td>{{ user.gbagendid }}</td>
+                        <td>{{ user.gbagenomb }}</td>
+                        <td>{{ user.gbagedir1 }}</td>
+                    </tr>
+                </tbody> -->
+            </table>
         </template>
     </dashboard-layout>
 </template>
@@ -43,6 +56,7 @@ export default {
     },
     data() {
         return {
+            usuarios: [],
             processing: false,
             Formulario: {
                 trabajador: {
@@ -170,6 +184,25 @@ export default {
         };
     },
     methods: {
+        // getUsuarios: function() {
+        //     axios.get('pruebas').then( rspta => {
+        //         $("#sample").DataTable({
+        //             data: rspta.data,
+        //             columns: [
+        //                 { data: 'gbagecage' },
+        //                 { data: 'gbagenomb' },
+        //                 { data: 'gbagendid' },
+        //                 { data: 'gbagedir1' }
+        //             ]
+        //         });
+        //     });
+        // },
+        getUsuarios: function() {
+            axios.get('pruebas').then( rspta => {
+                this.usuarios = rspta.data;
+                this.$datatbleGlobal('#sample');
+            });
+        },
         submit: function() {
             this.$store.state.processing = true;
             axios.post(this.route('programa.store'), this.Formulario)
@@ -219,6 +252,10 @@ export default {
             this.Formulario.txtbono = '',
             this.Formulario.bono = null
         }
+    },
+    mounted() {
+        this.$datatbleGlobal('#sample');
+        //this.getUsuarios();
     },
     created() {
         this.$store.state.fullscreenLoading = false;

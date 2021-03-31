@@ -11,6 +11,7 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::resource('programa', 'MO113\ME1\SM3\PrincipalController');
+Route::resource('pruebas', 'PruebaController');
 
 Route::get('/otro', function () {
     //return \DB::table('informix.accpo')->get();

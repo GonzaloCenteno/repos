@@ -304,12 +304,7 @@ export default {
     },
     methods: {
         buscarTrabajador: function() {
-            this.$store.state.processing = true;
-            // this.$inertia.post(this.route('programa.store'), this.Formulario)
-            // .then(() => {
-            //     console.log('guardar_Datos');
-            //     this.$store.state.processing = false;
-            // });
+            this.$refs.datos.handleCurrentChange(0);
         },
         traerDatosTrabajador: function() {
             this.$store.state.showModal = true;

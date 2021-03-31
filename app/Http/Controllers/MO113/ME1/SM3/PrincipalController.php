@@ -91,7 +91,7 @@ class PrincipalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($num)
+    public function show(Request $request, $num)
     {
         $limit = 5;
         $start = ($limit * $num) - $limit;
@@ -99,13 +99,14 @@ class PrincipalController extends Controller
             'total' => Gbage::join('adusr as a', 'a.adusrcage', '=', 'gbage.gbagecage')
                                 ->join('adagn', 'adagn.adagnagen', '=', 'a.adusragen')
                                 ->leftjoin('adusr as b', 'b.adusrusrn', '=', 'a.adusrperf')
-                                ->join('adcon', 'adcon.adconabre', '=', 'a.adusrstat')->where('adconpref',7)->count(),
+                                ->join('adcon', 'adcon.adconabre', '=', 'a.adusrstat')->where('adconpref',7)
+                                ->whereRaw("gbagendid || UPPER(gbagenomb) like '%".$request['texto']."%'")->count(),
             'data' => Gbage::select('gbagetdid','gbagenruc','gbagendid','gbage.gbagenomb','gbage.gbagecage','a.adusrusrn','a.adusrperf','b.adusrnomb','a.adusragen','adagndesc','a.adusrstat','a.adusrmrcb','adcondesc')
                             ->join('adusr as a', 'a.adusrcage', '=', 'gbage.gbagecage')
                             ->join('adagn', 'adagn.adagnagen', '=', 'a.adusragen')
                             ->leftjoin('adusr as b', 'b.adusrusrn', '=', 'a.adusrperf')
                             ->join('adcon', 'adcon.adconabre', '=', 'a.adusrstat')->where('adconpref',7)
-                            ->skip($start)->take($limit)->get()
+                            ->whereRaw("gbagendid || UPPER(gbagenomb) like '%".$request['texto']."%'")->skip($start)->take($limit)->get()
         ]); 
     }
 

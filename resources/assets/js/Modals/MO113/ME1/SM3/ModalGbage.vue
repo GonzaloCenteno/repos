@@ -11,14 +11,8 @@
                         <mdb-container>
                             <mdb-col class="col-12">
                                 <mdb-row>
-                                    <mdb-col class="col-6">
-                                        <mdb-input class="py-0 my-1" placeholder="" size="sm" type="text" label="NOMBRE" outline/>
-                                    </mdb-col>
-                                    <mdb-col class="col-3">
-                                        <mdb-input class="py-0 my-1" placeholder="" size="sm" type="text" label="DNI" outline/>
-                                    </mdb-col>
-                                    <mdb-col class="col-3">
-                                        <mdb-input class="py-0 my-1" placeholder="" size="sm" type="text" label="CODIGO" outline/>
+                                    <mdb-col class="col-12">
+                                        <mdb-input class="py-0 my-1" placeholder="" size="sm" type="text" label="DNI O NOMBRE" v-model="texto" outline/>
                                     </mdb-col>
                                 </mdb-row>
                                 <mdb-row>
@@ -92,15 +86,23 @@ export default {
     data() {
         return {
             trabajadores: Array,
-            total: 0
+            total: 0,
+            texto: '',
         };
     },
     methods: {
         handleCurrentChange (val) {
-            axios.get(this.route('programa.show', val))
+            this.$store.state.processing = true;
+            axios.get(this.route('programa.show', val), {
+                params: {
+                    texto: this.texto
+                }
+            })
             .then( rspta => {
                 this.trabajadores = rspta.data.data;
                 this.total = rspta.data.total;
+                this.texto = '';
+                this.$store.state.processing = false;
             }); 
         }
     },
