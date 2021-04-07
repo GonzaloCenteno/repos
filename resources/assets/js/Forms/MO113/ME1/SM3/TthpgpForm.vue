@@ -244,26 +244,11 @@
 <script>
 import LoadingButton from '../../../../Components/LoadingButton'
 import ModalGbage from '../../../../Modals/MO113/ME1/SM3/ModalGbage'
-import { mdbContainer,mdbRow,mdbIcon,mdbCol,mdbNavbar,mdbNavbarBrand,mdbNavbarToggler,mdbNavbarNav,mdbInput,
-        mdbFormInline,mdbBtn,mdbTextarea,mdbCardTitle } from "mdbvue";
 export default {
     name: "TthpgpForm",
     components: {
         ModalGbage,
-        LoadingButton,
-        mdbContainer,
-        mdbRow,
-        mdbIcon,
-        mdbCol,
-        mdbNavbar,
-        mdbNavbarBrand,
-        mdbNavbarToggler,
-        mdbNavbarNav,
-        mdbInput,
-        mdbFormInline,
-        mdbBtn,
-        mdbTextarea,
-        mdbCardTitle
+        LoadingButton
     },
     props: {
         Formulario: Object,

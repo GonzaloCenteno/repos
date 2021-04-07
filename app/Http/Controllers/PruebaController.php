@@ -14,9 +14,8 @@ class PruebaController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Gbage::select('gbagecage','gbagenomb','gbagendid','gbagedir1');
         //$data = Gbage::select('*');
-        return datatables()->of($data)->make(true);
+        return datatables()->of(Gbage::select('gbagecage','gbagenomb','gbagendid','gbagedir1'))->make(true);
     }
 
     /**

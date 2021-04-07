@@ -1,5 +1,6 @@
 <template>
-    <dashboard-layout>
+<h1>asdasd</h1>
+    <!-- <dashboard-layout>
         <template #main>
             <TthpgpForm :opciones="opciones" :Formulario="Formulario" :modal="modal">
                 <template #buttons>
@@ -12,7 +13,7 @@
             </TthpgpForm>
 
             <zingchart :data="chartData"></zingchart>
-            <table class="table table-dark" id="sample">
+            <table class="table table-hover" id="sample">
                 <thead>
                     <tr>
                     <th scope="col">#</th>
@@ -31,14 +32,13 @@
                 </tbody> -->
             </table>
         </template>
-    </dashboard-layout>
+    </dashboard-layout> -->
 </template>
 
 <script>
 
 import mapValues from "lodash/mapValues"
 import LoadingButton from '../../../../Components/LoadingButton'
-import DashboardLayout from './../../../Dashboard'
 import TthpgpForm from '../../../../Forms/MO113/ME1/SM3/TthpgpForm'
 import zingchartVue from 'zingchart-vue';
 

@@ -2,8 +2,15 @@ export default {
 	state: {
 		fullscreenLoading: false,
 		processing: false,
-		showModal: false,
 		errors: [],
+		showModal: false,
+		mostrarModal: {
+			display: 'block',
+			background: '#0000006b'
+		},
+		ocultarModal: {
+			display: 'none'
+		}
 		// modulos: []
 	},
 	mutations: {

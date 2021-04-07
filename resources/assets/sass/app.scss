@@ -1,76 +1,78 @@
 
 // Fonts
-@import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
+// @import url("https://fonts.googleapis.com/css?family=Raleway:300,400,600");
 
 // Variables
-@import "variables";
+// @import "variables";
 
 //Bootstra 4
+// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import '~datatables.net-buttons-bs4/css/buttons.bootstrap4';
 
 
-.fa-folder-open{
-    display: none !important;
-}
+// .fa-folder-open{
+//     display: none !important;
+// }
 
-.FondoColor {
-    background-color: rgba(224,224,178,0.16);
-}
+// .FondoColor {
+//     background-color: rgba(224,224,178,0.16);
+// }
 
-.NavbarClass {
-    position: fixed !important;
-    top:0;
-    width: 100%;
-    z-index: 1030;
-    background-color: #fafaf3;
-}
+// .NavbarClass {
+//     position: fixed !important;
+//     top:0;
+//     width: 100%;
+//     z-index: 1030;
+//     background-color: #fafaf3;
+// }
 
-.BotonEstilo {
-    border-radius: 50px !important;
-}
+// .BotonEstilo {
+//     border-radius: 50px !important;
+// }
 
-.SelectStyle {
-    width: 100%;
-}
+// .SelectStyle {
+//     width: 100%;
+// }
 
-.ContenedorForm {
-    height: 600px; 
-    overflow-y: scroll;
-}
+// .ContenedorForm {
+//     height: 600px; 
+//     overflow-y: scroll;
+// }
 
-.DisabledText {
-    background-color: rgba(225,225,225,2);
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-}
+// .DisabledText {
+//     background-color: rgba(225,225,225,2);
+//     border-radius: 4px;
+//     -moz-border-radius: 4px;
+// }
 
-.btn-spinner,
-.btn-spinner:after {
-    border-radius: 50%;
-    width: 1.5em;
-    height: 1.5em;
-}
+// .btn-spinner,
+// .btn-spinner:after {
+//     border-radius: 50%;
+//     width: 1.5em;
+//     height: 1.5em;
+// }
 
-.btn-spinner {
-    font-size: 10px;
-    position: relative;
-    text-indent: -9999em;
-    border-top: .2em solid #00234c;
-    border-right: .2em solid #00234c;
-    border-bottom: .2em solid #00234c;
-    border-left: .2em solid transparent;
-    transform: translateZ(0);
-    animation: spinning 1s infinite linear;
-}
+// .btn-spinner {
+//     font-size: 10px;
+//     position: relative;
+//     text-indent: -9999em;
+//     border-top: .2em solid #00234c;
+//     border-right: .2em solid #00234c;
+//     border-bottom: .2em solid #00234c;
+//     border-left: .2em solid transparent;
+//     transform: translateZ(0);
+//     animation: spinning 1s infinite linear;
+// }
 
-@keyframes spinning {
-    0% { transform: rotate(0deg) }
-    100% { transform: rotate(360deg) }
-}
+// @keyframes spinning {
+//     0% { transform: rotate(0deg) }
+//     100% { transform: rotate(360deg) }
+// }
 
-.TextInvalid {
-	color: red;
-	font-size: 80%;
-    padding-top: 0px;
-    margin-top: 0px;
-}
+// .TextInvalid {
+// 	color: red;
+// 	font-size: 80%;
+//     padding-top: 0px;
+//     margin-top: 0px;
+// }
+

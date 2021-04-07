@@ -1,17 +1,12 @@
 <template>
-     <mdb-btn :disabled="loading" outline="primary" size="sm" class="BotonEstilo"><mdb-icon :icon="icon"/> 
-        <div v-if="loading" class="btn-spinner mr-2 float-left" />
+     <button :disabled="loading" class="btn btn-sm btn-relief-primary"><i class="material-icons">{{ icon }}</i>
+        <div v-if="loading" class="btn-spinner mr-1 float-left" />
         <slot />
-     </mdb-btn>
+     </button>
 </template>
 
 <script>
-    import { mdbIcon,mdbBtn } from "mdbvue";
     export default {
-        components: {
-            mdbIcon,
-            mdbBtn
-        },
         props: {
             loading: Boolean,
             icon: String

@@ -2,10 +2,6 @@
 
 require('./bootstrap');
 
-require("bootstrap-css-only/css/bootstrap.min.css")
-require("mdbvue/lib/css/mdb.min.css")
-require("@fortawesome/fontawesome-free/css/all.min.css")
-
 import locale from 'element-ui/lib/locale/lang/es'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'zingchart/es6'
@@ -34,7 +30,7 @@ Vue.prototype.$datatbleGlobal = function(nombreTabla) {
         $(nombreTabla).DataTable().destroy();
         $(nombreTabla).DataTable({
             //dom: 'Bfrtip',
-            lengthMenu: [[10, 15, -1], [10, 15, "Todo"]],
+            lengthMenu: [[5, 10, 15, -1], [5, 10, 15, "Todo"]],
 			info: true,
 			ordering: true,
 			destroy:true,
@@ -42,12 +38,19 @@ Vue.prototype.$datatbleGlobal = function(nombreTabla) {
 			processing : true,
 			serverSide : true,
 			responsive: true,
-            ajax: "pruebas",
+            ajax: {
+                url: "programa/0",
+                // data: function (data) {
+                //     data.params = {
+                //         sac: "helo"
+                //     }
+                // }
+            },
             columns: [
-                { data: 'gbagecage', searchable: false },
+                { data: 'adusragen', searchable: false },
                 { data: 'gbagenomb' },
-                { data: 'gbagendid' },
-                { data: 'gbagedir1' }
+                { data: 'gbagetdid', searchable: false },
+                { data: 'gbagendid'}
             ],
             dom:    "B<'row'<'col-sm-12 col-md-6'l><'col-sm-12 col-md-6'f>>" +
                     "<'row'<'col-sm-12'tr>>" +

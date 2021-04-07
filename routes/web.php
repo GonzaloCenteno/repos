@@ -6,7 +6,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Carbon;
 
 Route::get('/', function () {
-    return Inertia::render('Dashboard');
+    //return Inertia::render('Dashboard');
+    return Inertia::render('DashboardTemplate');
 })->name('login');
 
 Auth::routes();
