@@ -2,6 +2,7 @@ export default {
 	state: {
 		fullscreenLoading: false,
 		processing: false,
+		inputloading: false,
 		errors: [],
 		showModal: false,
 		mostrarModal: {

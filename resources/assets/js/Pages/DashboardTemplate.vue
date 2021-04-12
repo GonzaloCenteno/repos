@@ -20,7 +20,12 @@
                         <ul class="menu-content">
                             <li v-for="(menu, index) in mod.admprs" :key="index"><a class="d-flex align-items-center" href="#"><i class="material-icons">panorama_fish_eye</i><span class="menu-item text-truncate" style="font-size: 0.8em !important" data-i18n="Second Level">{{ menu.admprdesc }}</span></a>
                                 <ul class="menu-content">
-                                    <li v-for="submenu in menu.admdts" :key="submenu.admdtmdtn"><a class="d-flex align-items-center" href="#"><span class="menu-item text-truncate" style="font-size: 0.8em !important" :title="submenu.admdtdesc" data-i18n="Third Level">{{ submenu.admdtdesc }}</span></a>
+                                    <li v-for="submenu in menu.admdts" :key="submenu.admdtmdtn">
+                                        <inertia-link class="d-flex align-items-center" :href="route('programa.index')" @click="renderizar">
+                                            <span class="menu-item text-truncate" style="font-size: 0.8em !important" :title="submenu.admdtdesc" data-i18n="Third Level">
+                                                {{ submenu.admdtdesc }}
+                                            </span>
+                                        </inertia-link>
                                     </li>
                                 </ul>
                             </li>
@@ -31,9 +36,13 @@
         </div>
 
         <div class="app-content content ">
-        <div class="content-overlay"></div>
-        <div class="header-navbar-shadow"></div>
-            <slot name="main"></slot>
+            <div class="content-overlay"></div>
+            <div class="header-navbar-shadow"></div>
+                <slot name="main"></slot>
+                <!-- <div class="col-12">
+                    <button type="button" @click="probar" class="btn btn-sm btn-relief-primary btn-icon"><i class="material-icons BtnSm">search</i></button>
+                </div>
+                <otro></otro> -->
         </div>
         
     </div>
@@ -41,10 +50,12 @@
 
 <script>
 import { Loading } from 'element-ui';
+import otro from './../Pages/MO113/ME1/SM3/otro'
 export default {
 	name: "DashboardTemplate",
 	components: {
-        Loading
+        Loading,
+        otro
     },
     data() {
         return {
@@ -55,6 +66,14 @@ export default {
         renderizar: function() {
             this.$store.state.fullscreenLoading = !this.$store.state.fullscreenLoading;
             this.$store.state.errors = [];
+        },
+        probar: function() {
+            console.log('23312asdas');
+            // this.$inertia.get(this.route('programa.index'), { search: 'John' }, 
+            // {
+            //     preserveState: (page) => Object.keys(page.props.modulos),
+            // });
+            this.$inertia.visit(this.route('programa.index'))
         }
     },
     mounted() {

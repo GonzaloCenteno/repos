@@ -28,6 +28,7 @@ Axios.interceptors.response.use(
 						offset: 50
                     });
 				    store.state.processing = false;
+					store.state.inputloading = false;
 				break;
 
 				case 401:
@@ -51,6 +52,7 @@ Axios.interceptors.response.use(
                     });
 					store.state.fullscreenLoading = false;
 					store.state.processing = false;
+					store.state.inputloading = false;
 				break;
 
 				case 502:
@@ -62,6 +64,7 @@ Axios.interceptors.response.use(
                     });
 					store.state.fullscreenLoading = false;
 					store.state.processing = false;
+					store.state.inputloading = false;
 			}
 			return Promise.reject(error.response);
 		}

@@ -43,6 +43,7 @@ class PrincipalRequest extends FormRequest
             'pago.tthpgptdes' => 'required',
             'pago.tthpgpcent' => 'required', 
             'pago.tthpgpcnta' => 'required', 
+            'pago.tthpgpcnti' => 'sometimes|required',
             'pago.tthpgpfpag' => 'required', 
             'bonos' => 'required|array|min:1'
         ];
@@ -51,7 +52,7 @@ class PrincipalRequest extends FormRequest
     public function messages()
     {
         return [
-            'bonos.min' => 'Debe Registrar al menos un Bono'
+            'bonos.required' => 'Debe Registrar al menos un Bono'
         ];
     }
 
@@ -75,6 +76,7 @@ class PrincipalRequest extends FormRequest
             'pago.tthpgptdes' => 'Tipo', 
             'pago.tthpgpcent' => 'Enitdad', 
             'pago.tthpgpcnta' => 'Cuenta Ahorros',
+            'pago.tthpgpcnti' => 'Cuenta Ahorros Interbancaria',
             'pago.tthpgpfpag' => 'Frecuencia de Pago',  
         ];
     }

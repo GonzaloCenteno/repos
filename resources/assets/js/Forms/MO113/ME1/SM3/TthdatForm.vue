@@ -1,23 +1,6 @@
 <template>
-    <div class="content-wrapper">
+    <div class="content-wrapper mt-3">
         <form>
-            <div class="content-header row">
-                <div class="content-header-left col-md-12 col-12 mb-1">
-                    <div class="row breadcrumbs-top">
-                        <div class="col-12">
-                            <h2 class="content-header-title float-left mb-0">1 - Modulo General</h2>
-                            <div class="breadcrumb-wrapper">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">1 - Clientes</a>
-                                    </li>
-                                    <li class="breadcrumb-item active">1 - Registro de Clientes
-                                    </li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="content-body">
                 <section id="card-actions">
                     <div class="row">
@@ -43,19 +26,18 @@
                                 <div class="card-content collapse show">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-5">
+                                            <div class="col-6">
                                                 <div class="form-group">
                                                     <div class="input-group input-group-merge form-label-group">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text form-control-sm"><i class="material-icons">person</i></span>
                                                         </div>
                                                         <input type="text" class="form-control form-control-sm" placeholder="NOMBRE" v-model="modal.nombre" disabled/>
-                                                        <label for="nombre"><b>NOMBRE</b></label>
+                                                        <div class="input-group-prepend">
+                                                            <button data-backdrop="false" type="button" @click="traerDatosTrabajador" class="btn btn-sm btn-relief-primary btn-icon"><i class="material-icons BtnSm">search</i></button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-1">
-                                                <button data-backdrop="false" type="button" @click="traerDatosTrabajador" class="btn btn-sm btn-relief-primary btn-icon"><i class="material-icons BtnSm">search</i></button>
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group">
@@ -78,7 +60,7 @@
                                             </div>
                                             <div class="col-2">
                                                 <div class="form-label-group">
-                                                    <input type="text" class="form-control form-control-sm" placeholder="COD. AGENCIA" v-model="modal.codAgencia" disabled/>
+                                                    <input type="text" class="form-control form-control-sm" placeholder="COD. AGENDA" v-model="modal.codAgencia" disabled/>
                                                     <label for="codagencia"><b>COD. AGENCIA</b></label>
                                                 </div>
                                             </div>
@@ -230,7 +212,7 @@
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <el-select class="SelectStyle" size="mini" v-model="Formulario.trabajador.tthdatosbs" filterable placeholder="OFICINA SBS">
-                                                        <el-option v-for="pago in tthpgptdes" :key="pago.tadconcorr" :label="pago.tadcondesc" :value="pago.tadconcorr"></el-option>
+                                                        <el-option v-for="oficinasbs in tthdatosbs" :key="oficinasbs.tadsofcofi" :label="oficinasbs.tadsofnomb" :value="oficinasbs.tadsofcofi"></el-option>
                                                     </el-select>
                                                     <div v-if="$store.state.errors['trabajador.tthdatosbs']" class="TextInvalid">{{ $store.state.errors['trabajador.tthdatosbs'][0] }}</div>
                                                 </div>
@@ -317,28 +299,46 @@
                                         <div class="row">
                                             <div class="col-2">
                                                 <div class="form-group">
-                                                    <el-select class="SelectStyle" size="mini" v-model="Formulario.pago.tthpgptdes" filterable placeholder="TIPO">
+                                                    <el-select ref="cmbTipo" @change="tipoAbono($event)" class="SelectStyle" size="mini" v-model="Formulario.pago.tthpgptdes" filterable placeholder="TIPO">
                                                         <el-option v-for="pago in tthpgptdes" :key="pago.tadconcorr" :label="pago.tadcondesc" :value="pago.tadconcorr"></el-option>
                                                     </el-select>
                                                     <div v-if="$store.state.errors['pago.tthpgptdes']" class="TextInvalid">{{ $store.state.errors['pago.tthpgptdes'][0] }}</div>
                                                 </div>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-4" v-loading="$store.state.inputloading">
                                                 <div class="form-group">
-                                                    <el-select class="SelectStyle" v-model="Formulario.pago.tthpgpcent" size="mini" filterable placeholder="ENTIDAD">
-                                                        <el-option v-for="pago in tthpgptdes" :key="pago.tadconcorr" :label="pago.tadcondesc" :value="pago.tadconcorr"></el-option>
+                                                    <el-select @change="SeleccionarEntidad($event,$refs.cmbTipo)" class="SelectStyle" clearable v-model="Formulario.pago.tthpgpcent" size="mini" filterable placeholder="ENTIDAD">
+                                                        <el-option v-for="entidad in tthpgpcent" :key="entidad.cbco" :label="entidad.nbco" :value="entidad.cbco"></el-option>
                                                     </el-select>
                                                     <div v-if="$store.state.errors['pago.tthpgpcent']" class="TextInvalid">{{ $store.state.errors['pago.tthpgpcent'][0] }}</div>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
-                                                <div class="form-group">
-                                                    <el-select class="SelectStyle" v-model="Formulario.pago.tthpgpcnta" size="mini" filterable placeholder="CUENTA AHORROS">
-                                                        <el-option v-for="pago in tthpgptdes" :key="pago.tadconcorr" :label="pago.tadcondesc" :value="pago.tadconcorr"></el-option>
-                                                    </el-select>
-                                                    <div v-if="$store.state.errors['pago.tthpgpcnta']" class="TextInvalid">{{ $store.state.errors['pago.tthpgpcnta'][0] }}</div>
+                                            <template v-if="flag">
+                                                <div class="col-6" v-loading="$store.state.inputloading">
+                                                    <div class="form-group">
+                                                        <el-select class="SelectStyle" v-model="Formulario.pago.tthpgpcnta" size="mini" filterable placeholder="CUENTA AHORROS">
+                                                            <el-option v-for="cuentahorro in cuentaAhorros" :key="cuentahorro.ncta" :label="cuentahorro.ncta" :value="cuentahorro.ncta"></el-option>
+                                                        </el-select>
+                                                        <div v-if="$store.state.errors['pago.tthpgpcnta']" class="TextInvalid">{{ $store.state.errors['pago.tthpgpcnta'][0] }}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            </template>
+                                            <template v-if="!flag">
+                                                <div class="col-3" v-loading="$store.state.inputloading">
+                                                    <div class="form-label-group">
+                                                        <input type="number" class="form-control form-control-sm" :class="{ 'is-invalid' : $store.state.errors['pago.tthpgpcnta'] }" placeholder="CNTA. AHORROS" v-model="Formulario.pago.tthpgpcnta"/>
+                                                        <label for="cuentaahorros"><b>CNTA. AHORROS</b></label>
+                                                        <div v-if="$store.state.errors['pago.tthpgpcnta']" class="TextInvalid">{{ $store.state.errors['pago.tthpgpcnta'][0] }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <div class="form-label-group">
+                                                        <input type="number" class="form-control form-control-sm" :class="{ 'is-invalid' : $store.state.errors['pago.tthpgpcnti'] }" placeholder="CNTA. AHORROS INTERBANCARIA" v-model="Formulario.pago.tthpgpcnti"/>
+                                                        <label for="cuentainterbancaria"><b>CNTA. AHORROS INTERBANCARIA</b></label>
+                                                        <div v-if="$store.state.errors['pago.tthpgpcnti']" class="TextInvalid">{{ $store.state.errors['pago.tthpgpcnti'][0] }}</div>
+                                                    </div>
+                                                </div>
+                                            </template>
                                         </div>
 
                                         <div class="row">
@@ -480,7 +480,8 @@ export default {
     props: {
         Formulario: Object,
         opciones: Array,
-        modal: Object
+        modal: Object,
+        oficinasbs: Array
     },
     data() {
         return {
@@ -496,8 +497,11 @@ export default {
             tthdatspen: [], 
             tthpgptdes: [],
             tthpgpfpag: [],
+            tthdatosbs: [],
+            tthpgpcent: [],
+            cuentaAhorros: [],
             bonos: [],
-            
+            flag: true
         }
     },
     created() {
@@ -514,6 +518,7 @@ export default {
         this.tthpgptdes = this.opciones.filter(pago => pago.tadconpref == 18);
         this.tthpgpfpag = this.opciones.filter(formaspago => formaspago.tadconpref == 19);
         this.bonos = this.opciones.filter(bono => bono.tadconpref == 20);
+        this.tthdatosbs = this.oficinasbs;
     },
     methods: {
         traerDatosTrabajador: function() {
@@ -521,18 +526,18 @@ export default {
         },
         llenarDatos: function(data) {
             this.$store.state.showModal = false;
-            this.Formulario.trabajador.tthdatcage = data.trab.gbagecage;
-            this.modal.nombre = data.trab.gbagenomb;
-            this.modal.nombre = data.trab.gbagenomb;
-            this.modal.dni = data.trab.gbagendid;
-            this.modal.usuario = data.trab.adusrusrn;
-            this.modal.codAgencia = data.trab.gbagecage;
-            this.modal.estado = data.trab.adusrstat;
-            this.modal.perfil = data.trab.adusrnomb;
-            this.modal.agencia = data.trab.adagndesc;
-            this.modal.fechaIngreso = data.trab.gbagenomb;
-            this.modal.fechaReingreso = data.trab.gbagenomb;
-            this.modal.fechaCese = data.trab.gbagenomb;
+            this.Formulario.trabajador.tthdatcage = data.datos.gbagecage;
+            this.modal.nombre = data.datos.gbagenomb;
+            this.modal.nombre = data.datos.gbagenomb;
+            this.modal.dni = data.datos.gbagendid;
+            this.modal.usuario = data.datos.adusrusrn;
+            this.modal.codAgencia = data.datos.gbagecage;
+            this.modal.estado = (data.datos.adusrmrcb == 0) ? 'ACTIVO' : 'CESADO';
+            this.modal.perfil = data.datos.adusrnomb;
+            this.modal.agencia = data.datos.adagndesc;
+            this.modal.fechaIngreso = data.obj.fing;
+            this.modal.fechaReingreso = data.obj.frei;
+            this.modal.fechaCese = data.obj.fces;
         },
         abonar: function(abono) { 
             if(this.Formulario.bono == null || this.Formulario.txtbono == '')
@@ -544,6 +549,42 @@ export default {
         },
         eliminarCelda(row) {
             this.$delete(this.Formulario.bonos, row);
+        },
+        tipoAbono(evt) {
+            let valor = (evt == 1) ? 8 : 9;
+            this.Formulario.pago.tthpgpcent = null;
+            this.cuentaAhorros = [];
+            this.Formulario.pago.tthpgpcnta = null;
+            this.$store.state.inputloading = true;
+            axios.get(this.route('programa.show',0), {
+                params: {
+                    valor: valor,
+                    tipo: 2
+                }
+            })
+            .then(rspta => {
+                this.tthpgpcent = rspta.data;
+                this.flag = (evt == 1) ? true : false;
+                this.$store.state.inputloading = false;
+            }); 
+        },
+        SeleccionarEntidad(evt,tipo) {
+            let age = evt;
+            let tabon = tipo.selected.$options.propsData.value;
+            if(age == 60406 && tabon == 1)
+            {
+                this.$store.state.inputloading = true;
+                axios.get(this.route('programa.show',0), {
+                    params: {
+                        valor: (this.modal.codAgencia == '') ? 0 : this.modal.codAgencia,
+                        tipo: 3
+                    }
+                })
+                .then(rspta => {
+                    this.cuentaAhorros = rspta.data;
+                    this.$store.state.inputloading = false;
+                }); 
+            }
         }
     }
 };

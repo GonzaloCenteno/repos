@@ -6,12 +6,13 @@ use Inertia\Inertia;
 use Illuminate\Support\Carbon;
 
 Route::get('/', function () {
-    //return Inertia::render('Dashboard');
     return Inertia::render('DashboardTemplate');
 })->name('login');
 
 Auth::routes();
 Route::resource('programa', 'MO113\ME1\SM3\PrincipalController');
+Route::resource('fth5001', 'MO113\ME5\SM1\Fth5001Controller');
+Route::resource('fth5000', 'MO113\ME4\SM1\Fth5000Controller');
 Route::resource('pruebas', 'PruebaController');
 
 Route::get('/otro', function () {

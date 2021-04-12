@@ -3,6 +3,7 @@
 namespace App\Http\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Crypt;
 
 class Tthbon extends Model
 {
@@ -11,4 +12,14 @@ class Tthbon extends Model
 
     protected $fillable = ['tthboncage','tthbonitem','tthbonmont','tthbonestd','tthbonmrcb','tthbonfpro',
                             'tthbonfreg','tthbonhora','tthbonusrn'];
+
+    public function setTthbonmontAttribute($value)
+    {
+        $this->attributes['tthbonmont'] = Crypt::encryptString($value);
+    }
+
+    public function getTthbonmontAttribute($value)
+    {
+        return Crypt::decryptString($value);
+    }
 }
