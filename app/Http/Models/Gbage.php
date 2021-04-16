@@ -14,6 +14,17 @@ class Gbage extends Model
     //protected $primaryKey = 'admodmodn';
     //protected $fillable = ['admdtmdtn'];
 
+    protected $appends = ['nrodoc'];
+
+    public function getNrodocAttribute()
+    {
+    	  if($this->attributes['gbagetdid'] == 1):
+    		    return $this->attributes['gbagendid'];
+    	  else:
+    		    return $this->attributes['gbagenruc'];
+		    endif;
+    }
+
     public function getGbagetdidAttribute($value)
     {
         switch ($value) {

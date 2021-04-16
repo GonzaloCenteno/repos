@@ -43,7 +43,7 @@
             </div>
         </template>
         <template #main>
-            <TthdatForm :opciones="opciones" :Formulario="Formulario" :modal="modal" :oficinasbs="oficinasbs"></TthdatForm>
+            <TthdatForm :opciones="opciones" :Formulario="Formulario" :modal="modal" :oficinasbs="oficinasbs" :datos="datos"></TthdatForm>
         </template>
     </dashboard-template>
 </template>
@@ -114,6 +114,10 @@ export default {
                 fechaIngreso: '',
                 fechaReingreso: '',
                 fechaCese: ''
+            },
+            datos: {
+                estado: null,
+                busqueda: {}
             }
         };
     },
@@ -173,6 +177,8 @@ export default {
         
     },
     created() {
+        // $.app.menu.changeMenu();
+        // $.app.menu.changeMenu('xl');
         this.$store.state.fullscreenLoading = false;
     },
 };

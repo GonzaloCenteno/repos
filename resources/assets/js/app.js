@@ -10,9 +10,11 @@ import zingchartVue from 'zingchart-vue';
 import { InertiaApp } from '@inertiajs/inertia-vue'
 import ElementUI from 'element-ui'
 import Vue from 'vue'
+import 'material-icons/iconfont/material-icons.css';
 import Vuex from 'vuex'
 import storeIndex from './store/index'
 import services from './store/handler'
+import 'boxicons'
 
 // import datatable from 'datatables.net-bs4'
 // require( 'datatables.net-buttons/js/dataTables.buttons' )

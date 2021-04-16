@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-10">
                         <div class="demo-inline-spacing">
-                            <loading-button :loading="$store.state.processing" :icon="'article'">Nuevo</loading-button>
+                            <loading-button :loading="$store.state.processing" :icon="'article'" @click.native="limpiarData">Nuevo</loading-button>
                             <loading-button :loading="$store.state.processing" :icon="'print'" @click.native="exportarReporte">Exportar</loading-button>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
             </div>
         </template>
         <template #main>
-            <ExportarForm :form="form"></ExportarForm>
+            <ExportarForm :form="form" :plazas="plazas" :agencias="agencias" :datos="datos"></ExportarForm>
         </template>
     </dashboard-template>
 </template>
@@ -58,16 +58,115 @@ export default {
         DashboardTemplate,
         ExportarForm
     },
+    props: {
+        plazas: Array,
+        agencias: Array
+    },
     data() {
         return {
             form:{
-                chbopciones: []
+                chbopciones: [],
+                plazainicial: null,
+                plazafinal: null,
+                agenciainicial: null,
+                agenciafinal: null,
+                tipo: null,
+                principal: false,
+                flag: true,
+                gbagecage: null,
+                nombre: null,
+                dni: null,
+                flagplaza: true,
+                flagagencia: true,
+                rdobloque: null
+            },
+            datos: {
+                estado: null,
+                busqueda: {}
             }
         };
     },
     methods: {
+       limpiarData: function() {
+            this.form.chbopciones = [];
+            this.form.principal = false;
+            this.form.tipo = '',
+            this.datos.estado = '';
+            this.form.plazainicial = null;
+            this.form.plazafinal = null;
+            this.form.agenciainicial = null;
+            this.form.agenciafinal = null;
+            this.form.nombre = null;
+            this.form.dni = null;
+            this.form.flag = true;
+            this.form.flagplaza = true;
+            this.form.flagagencia = true;
+            this.form.rdobloque = null;
+       },
        exportarReporte: function() {
-           
+           console.log(this.form.chbopciones.length);
+           if(this.form.tipo == '' || this.form.tipo == null)
+           {
+                this.$notify({
+                    title: 'Alerta',
+                    message: 'Debe Seleccionar Un Tipo Reporte',
+                    type: 'warning',
+                    duration: 3000,
+                    offset: 50
+                });
+                return false;
+           }
+
+           if(this.datos.estado == '' || this.datos.estado == null)
+           {
+                this.$notify({
+                    title: 'Alerta',
+                    message: 'Debe Seleccionar El Estado del Trabajador',
+                    type: 'warning',
+                    duration: 3000,
+                    offset: 50
+                });
+                return false;
+           }
+
+           if(this.form.chbopciones.length == 0)
+           {
+                this.$notify({
+                    title: 'Alerta',
+                    message: 'Debe Seleccionar Una Opcion',
+                    type: 'warning',
+                    duration: 3000,
+                    offset: 50
+                });
+                return false;
+           }
+
+            this.$store.state.processing = true;
+            this.$set(this.form, 'est', this.datos.estado);
+            axios.post(this.route('fth5000.store'), this.form, {responseType: 'blob'})
+            .then(response => {
+                if(response.data.type == 'text/html')
+                {
+                    this.$notify({
+                        title: 'No Se Encontraron Datos',
+                        message: 'Reporte No Generado',
+                        type: 'warning',
+                        duration: 3000,
+                        offset: 50
+                    });
+                }
+                else
+                {
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'DATOSPERSONALFONDESURCO.xlsx');
+                    document.body.appendChild(link);
+                    link.click();   
+                }
+                this.limpiarData();
+                this.$store.state.processing = false;
+            });
        }
     }
 };

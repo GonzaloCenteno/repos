@@ -5,6 +5,7 @@ namespace App\Http\Controllers\MO113\ME1\SM3;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PrincipalRequest;
+use App\Http\Services\MO113\Mo113Service;
 use Illuminate\Support\Facades\DB;
 use App\Http\Models\Tadcon;
 use App\Http\Models\Gbage;
@@ -18,6 +19,13 @@ use Redirect;
 
 class PrincipalController extends Controller
 {
+    private $mo113service;
+
+    public function __construct(Mo113Service $mo113service)
+    {
+        $this->mo113service = $mo113service;
+    }
+
     public function index()
     {
         return Inertia::render("MO113/ME1/SM3/create", [
@@ -80,11 +88,15 @@ class PrincipalController extends Controller
     public function show(Request $request, $num)
     {
         if($request['tipo'] == 1):
+            $datos = '';
+            $datos .= (empty($request['parametros']['busqueda']['nombre'])) ? '' : 'and gbagenomb like "%'.strtoupper($request['parametros']['busqueda']['nombre']).'%"';
+            $datos .= (empty($request['parametros']['busqueda']['codigo'])) ? '' : 'and gbagecage = '.$request['parametros']['busqueda']['codigo'];
+            $datos .= (empty($request['parametros']['busqueda']['dni'])) ? '' : 'and gbagendid = '.$request['parametros']['busqueda']['dni'];
             return datatables()->of(Gbage::select('gbagetdid','gbagenruc','gbagendid','gbage.gbagenomb','gbage.gbagecage','a.adusrusrn','a.adusrperf','b.adusrnomb','a.adusragen','adagndesc','a.adusrstat','a.adusrmrcb','adcondesc')
                 ->join('adusr as a', 'a.adusrcage', '=', 'gbage.gbagecage')
                 ->join('adagn', 'adagn.adagnagen', '=', 'a.adusragen')
                 ->leftjoin('adusr as b', 'b.adusrusrn', '=', 'a.adusrperf')
-                ->join('adcon', 'adcon.adconabre', '=', 'a.adusrstat')->where('adconpref',7))
+                ->join('adcon', 'adcon.adconabre', '=', 'a.adusrstat')->whereRaw('1 = 1 '.$datos)->where('adconpref',7))
                 ->addColumn('action', function ($c) {
                     return "<button data-object='$c' class='btn btn-primary btn-relief-danger btn-icon btnExtraer'>+</button>";
                 })
@@ -96,48 +108,13 @@ class PrincipalController extends Controller
             $data = DB::select('SELECT camcancta AS ncta FROM camca WHERE camcacage = ? AND camcatpca = ? AND camcacmon = ? AND camcastat = ? ORDER BY camcafumv DESC', array($request['valor'],2,1,1));
             return (empty($data)) ? $arreglo : $data; 
         else:
-            $resultado = $this->valoresContrato($request['valor']);
-                if($resultado[0]->cant > 0 ):
-                    $arreglo = $this->traerFechas($resultado, $request['valor']);
-                else:
-                    $arreglo['fing'] = 'SIN DATOS';
-                    $arreglo['frei'] = 'SIN DATOS';
-                    $arreglo['fces'] = 'SIN DATOS';
-                endif;
-            return $arreglo;
+            $resultado = $this->mo113service->valoresContrato($request['valor']);
+            $fechas = $this->mo113service->traerFechas($resultado, $request['valor']);
+            $arreglo['fing'] = $fechas['fing'];
+            $arreglo['frei'] = $fechas['frei'];
+            $arreglo['fces'] = $fechas['fces'];
+            return response()->json($arreglo);
         endif;  
-    }
-
-    private function valoresContrato($gbagecage)
-    {
-        $sql = DB::select("SELECT COUNT(*) AS cant,
-                            (SELECT MIN(b.tthcttitem) FROM tthctt b WHERE b.tthcttcage = $gbagecage AND b.tthcttmrcb = 0) as imin,
-                            (SELECT MAX(c.tthcttitem) FROM tthctt c WHERE c.tthcttcage = $gbagecage AND c.tthcttmrcb = 0) AS imax
-                        FROM tthctt WHERE tthcttcage = $gbagecage AND tthcttmrcb = 0" );
-        return $sql;
-    }
-
-    private function traerFechas($data, $gbagecage)
-    {
-        $fing = DB::select("SELECT tthcttfini AS fing FROM tthctt WHERE tthcttcage = $gbagecage AND tthcttitem = ".$data[0]->imin." AND tthcttmrcb = 0");
-        $fces = DB::select("SELECT tthcttffin AS fces FROM tthctt WHERE tthcttcage = $gbagecage AND tthcttitem = ".$data[0]->imax." AND tthcttmrcb = 0");
-        $datos['fing'] = Carbon::parse($fing[0]->fing)->format('d/m/Y');
-        $datos['fces'] = ($fces[0]->fces == '') ? 'INDETERMINADO' : Carbon::parse($fces[0]->fces)->format('d/m/Y');
-
-        if ( $data[0]->imin == $data[0]->imax ):
-            $datos['frei'] = 'SIN DATOS';
-        else:
-            for($i = $data[0]->imin; $i < $data[0]->imax; $i++): 
-                $sql = DB::select("SELECT (SELECT tthcttfini AS fing FROM tthctt WHERE tthcttcage = $gbagecage AND tthcttitem = $i + 1 AND tthcttmrcb = 0) -
-                            (SELECT tthcttffin AS fing FROM tthctt WHERE tthcttcage = $gbagecage AND tthcttitem = $i AND tthcttmrcb = 0) AS ddif,
-                            (SELECT tthcttfini AS fing FROM tthctt WHERE tthcttcage = $gbagecage AND tthcttitem = $i + 1 AND tthcttmrcb = 0) AS fini FROM gbpmt");
-                if($sql[0]->ddif > 1):
-                    $fechaReingreso = $sql[0]->fini;
-                endif;
-            endfor;
-            $datos['frei'] = ($fechaReingreso != '') ? Carbon::parse($fechaReingreso)->format('d/m/Y') : 'SIN REINGRESO';
-        endif;
-        return $datos;
     }
 
     public function edit($id)

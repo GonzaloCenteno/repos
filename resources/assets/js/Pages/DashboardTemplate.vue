@@ -39,10 +39,6 @@
             <div class="content-overlay"></div>
             <div class="header-navbar-shadow"></div>
                 <slot name="main"></slot>
-                <!-- <div class="col-12">
-                    <button type="button" @click="probar" class="btn btn-sm btn-relief-primary btn-icon"><i class="material-icons BtnSm">search</i></button>
-                </div>
-                <otro></otro> -->
         </div>
         
     </div>
@@ -50,12 +46,10 @@
 
 <script>
 import { Loading } from 'element-ui';
-import otro from './../Pages/MO113/ME1/SM3/otro'
 export default {
 	name: "DashboardTemplate",
 	components: {
-        Loading,
-        otro
+        Loading
     },
     data() {
         return {

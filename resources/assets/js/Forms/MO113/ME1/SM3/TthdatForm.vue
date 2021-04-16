@@ -33,6 +33,7 @@
                                                             <span class="input-group-text form-control-sm"><i class="material-icons">person</i></span>
                                                         </div>
                                                         <input type="text" class="form-control form-control-sm" placeholder="NOMBRE" v-model="modal.nombre" disabled/>
+                                                        <label for="nombre"><b>NOMBRE</b></label>
                                                         <div class="input-group-prepend">
                                                             <button data-backdrop="false" type="button" @click="traerDatosTrabajador" class="btn btn-sm btn-relief-primary btn-icon"><i class="material-icons BtnSm">search</i></button>
                                                         </div>
@@ -453,7 +454,7 @@
         </form>
 
         <div class="modal fade" :class="{ show: $store.state.showModal }" :style=" $store.state.showModal ? $store.state.mostrarModal : $store.state.ocultarModal ">
-            <ModalGbage ref="datos" @llenarDatos="llenarDatos">
+            <ModalGbage ref="datos" @llenarDatos="llenarDatos" @buscarTrabajador="buscarTrabajador" :datatable="datatable" :detalle="detalle" :cabecera="cabecera">
                 <template #buttons>
                     <loading-button
                         :loading="$store.state.processing"
@@ -481,7 +482,8 @@ export default {
         Formulario: Object,
         opciones: Array,
         modal: Object,
-        oficinasbs: Array
+        oficinasbs: Array,
+        datos: Object
     },
     data() {
         return {
@@ -501,7 +503,22 @@ export default {
             tthpgpcent: [],
             cuentaAhorros: [],
             bonos: [],
-            flag: true
+            flag: true,
+            cabecera: ["COD AGENDA","NOMBRE","TIPO DOCUMENTO","NRO. DOCUMENTO",'ACCIONES'],
+            detalle: [
+                { data: 'gbagecage', searchable: false },
+                { data: 'gbagenomb' },
+                { data: 'gbagetdid', searchable: false },
+                { data: 'gbagendid'},
+                { data: 'action', name: 'action', orderable: false, searchable: false }
+            ],
+            datatable: {
+                url: this.route('programa.show',0),
+                data: {
+                    tipo: 1,
+                    parametros: this.datos
+                }
+            },
         }
     },
     created() {
@@ -522,22 +539,32 @@ export default {
     },
     methods: {
         traerDatosTrabajador: function() {
+            this.$refs.datos.crearTabla();
             this.$store.state.showModal = true;
         },
         llenarDatos: function(data) {
-            this.$store.state.showModal = false;
-            this.Formulario.trabajador.tthdatcage = data.datos.gbagecage;
-            this.modal.nombre = data.datos.gbagenomb;
-            this.modal.nombre = data.datos.gbagenomb;
-            this.modal.dni = data.datos.gbagendid;
-            this.modal.usuario = data.datos.adusrusrn;
-            this.modal.codAgencia = data.datos.gbagecage;
-            this.modal.estado = (data.datos.adusrmrcb == 0) ? 'ACTIVO' : 'CESADO';
-            this.modal.perfil = data.datos.adusrnomb;
-            this.modal.agencia = data.datos.adagndesc;
-            this.modal.fechaIngreso = data.obj.fing;
-            this.modal.fechaReingreso = data.obj.frei;
-            this.modal.fechaCese = data.obj.fces;
+            let datos = JSON.parse(data);
+            axios.get(this.route('programa.show',0), {
+                params: {
+                    valor: datos.gbagecage,
+                    tipo: 4
+                }
+            })
+            .then(rspta => {
+                this.$store.state.showModal = false;
+                this.Formulario.trabajador.tthdatcage = datos.gbagecage;
+                this.modal.nombre = datos.gbagenomb;
+                this.modal.nombre = datos.gbagenomb;
+                this.modal.dni = datos.gbagendid;
+                this.modal.usuario = datos.adusrusrn;
+                this.modal.codAgencia = datos.gbagecage;
+                this.modal.estado = (datos.adusrmrcb == 0) ? 'ACTIVO' : 'CESADO';
+                this.modal.perfil = datos.adusrnomb;
+                this.modal.agencia = datos.adagndesc;
+                this.modal.fechaIngreso = rspta.data.fing;
+                this.modal.fechaReingreso = rspta.data.frei;
+                this.modal.fechaCese = rspta.data.fces;
+            }); 
         },
         abonar: function(abono) { 
             if(this.Formulario.bono == null || this.Formulario.txtbono == '')
@@ -549,6 +576,10 @@ export default {
         },
         eliminarCelda(row) {
             this.$delete(this.Formulario.bonos, row);
+        },
+        buscarTrabajador: function(busqueda) {
+            this.datos.busqueda = busqueda;
+            this.$refs.datos.crearTabla();
         },
         tipoAbono(evt) {
             let valor = (evt == 1) ? 8 : 9;
